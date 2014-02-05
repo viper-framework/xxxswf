@@ -128,7 +128,7 @@ class swf_header(object):
             header['xmax'] = bs.fetch(int(header['nbits']))/20
             header['ymin'] = bs.fetch(int(header['nbits']))/20
             header['ymax'] = bs.fetch(int(header['nbits']))/20
-            header['frame_rate'] = self.read_ui16(swf.read(2))
+            header['frame_rate'] = self.read_ui16(swf.read(2)) >> 8
             header['frame_count'] = self.read_ui16(swf.read(2))
             header['header_end'] = int(swf.tell())
         except:
@@ -337,6 +337,7 @@ class xxxswf:
     def pre_file_scan(self, data, file_scan):
         'executes a user defined function'
         for func in self.file_scan:
+            modified = None
             try:
                 modified = func(data)
             except:
@@ -376,21 +377,21 @@ class xxxswf:
             if self.show_errors:
                 print "\t[ERROR] pylzma module not installed - aborting validation/decompression"
             return None
-    #try:
-        signature = swf.read(3)
-        if signature != 'FWS':
-            if self.show_errors:
-                print "\t[ERROR] FWS Header not found, aborting lzma compression"
-            return None 
-        else:
-            vfl = swf.read(5)
-            # "ZWS" | version | len | compressed len | lzma compressed data
-            # TEST
-            import pylzma
-            lzma_data = pylzma.compress(swf.read())
-            return "ZWS" + vfl + struct.pack("<I", len(lzma_data)-5) + lzma_data                          
-    #except:
-        return None
+        try:
+            signature = swf.read(3)
+            if signature != 'FWS':
+                if self.show_errors:
+                    print "\t[ERROR] FWS Header not found, aborting lzma compression"
+                return None 
+            else:
+                vfl = swf.read(5)
+                # "ZWS" | version | len | compressed len | lzma compressed data
+                # TEST
+                import pylzma
+                lzma_data = pylzma.compress(swf.read())
+                return "ZWS" + vfl + struct.pack("<I", len(lzma_data)-5) + lzma_data                          
+        except:
+            return None
             
     def compress_zlib(self, swf):
         if type(swf) is str:
@@ -566,7 +567,7 @@ class xxxswf:
             if self.opt_decompress is not None:
                 self.write_swf(swf)
             if self.opt_header is not None:
-                self.swf_header(swf)
+                swf_header(swf)
 
 
 
