@@ -2,37 +2,39 @@
 Name:
     xxxswf.py
 Version:
-    1.9 - Dev Build
+    1.9.1
 Date:
-    2014/02/03
+    2014/02/09
 Author:
     alexander<dot>hanel<at>gmail<dot>com
-'''
 
-'''
-Notes:
-    Scan scenarios
-      Scan file for SWF(s) - command line or from 
-      Scan file for SWF(s) and extract them 
-      Scan file for SWF(s) and scan them with Yara
-      Scan file for SWF(s), extract them and scan with Yara
-      Scan directory recursively for files that contain SWF(s) 
-      Scan directory recursively for files that contain SWF(s) and extract them
 
-TO DO
-    extracting CWS & ZWS if not decompresse option is not selected 
-    
-    Check Header Decompressions
+Reads, influences or borrowed code...
+    http://www.the-labs.com/MacromediaFlash/SWF-Spec/SWFfileformat.html
+    http://room32.dyndns.org/forums/showthread.php?766-SWFCompression
+    http://pydoc.net/Python/tomato/0.0.2/tomato.swf_image_dumper/
+    http://codeazur.com.br/fitc/HackingSWF.pdf
+    https://gist.github.com/moriyoshi/1736477
 
-http://www.the-labs.com/MacromediaFlash/SWF-Spec/SWFfileformat.html
-http://room32.dyndns.org/forums/showthread.php?766-SWFCompression
-http://pydoc.net/Python/tomato/0.0.2/tomato.swf_image_dumper/
-http://codeazur.com.br/fitc/HackingSWF.pdf
+License:
+xxxswf.py is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see
+<http://www.gnu.org/licenses/>.
         
 '''
 
 __author__  = "Alexander Hanel"
-__version__ = "1.9"
+__version__ = "1.9.1"
 __contact__ = "alexander<dot>hanel<at>gmail<dot>com"
 
 import sys 
