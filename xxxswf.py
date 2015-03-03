@@ -219,7 +219,7 @@ class xxxswf:
     '''
     def uncompress_lzma(self, data):
         'uncompress lzma compressed stream'
-        if self.lzma_installed == False:
+        if not self.lzma_install:
             if self.show_errors:
                 print "\t[ERROR] pylzma module not installed - aborting validation/decompression"
             return None
@@ -375,7 +375,7 @@ class xxxswf:
         'compress a SWF with LZMA'
         if type(swf) is str:
           swf = StringIO(swf)
-        if self.lzma_installed is False:
+        if not self.lzma_install:
             if self.show_errors:
                 print "\t[ERROR] pylzma module not installed - aborting validation/decompression"
             return None
