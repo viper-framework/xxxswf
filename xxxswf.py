@@ -541,6 +541,7 @@ class xxxswf:
                     break
         # search for SWF file headers in the stream
         swf_data = self.find_swf(stream)
+        stream.seek(0)
         # print the number of found SWF Headers, FPs included
         if self.cmd_run:
             print "\n[SUMMARY] Potentially %d SWF(s) in MD5 %s:%s" % (len(swf_data), self.md5_hash_buffer(stream), file_name)
