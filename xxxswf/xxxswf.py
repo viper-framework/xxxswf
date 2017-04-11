@@ -74,7 +74,10 @@ class BitStream(object):
 
     def fetch(self, nbits):
         while self.n < nbits:
-            self.rem = (self.rem << 8) | self.buf[self.i]
+            if sys.version_info < (3, 0):
+                self.rem = (self.rem << 8) | ord(self.buf[self.i])
+            else:
+                self.rem = (self.rem << 8) | self.buf[self.i]
             self.n += 8
             self.i += 1
         retval = (self.rem >> (self.n - nbits)) & ((1 << nbits) - 1)
@@ -246,14 +249,14 @@ class xxxswf:
         # verify header. Should never happen but will test anyway
         if header not in [b"FWS", b"CWS", b"ZWS"]:
             if self.debug:
-                        print('\t\t[DEBUG] Header not found', end=' ')
+                        print('\t\t[DEBUG] Header not found')
             return None
         # read version. index is file length
         version = struct.unpack("<b", stream.read(1))[0]
         # verify version
         if version > self.valid_version:
             if self.debug:
-                        print('\n\t\t[DEBUG] Invalid Version', end=' ')
+                        print('\n\t\t[DEBUG] Invalid Version')
             return None
         # read size
         size = struct.unpack("<i", stream.read(4))[0]
@@ -263,14 +266,14 @@ class xxxswf:
                 print("- FWS Header")
             if size < 10:
                 if self.debug:
-                    print('\t\t[DEBUG] FWS Size Invalid', end=' ')
+                    print('\t\t[DEBUG] FWS Size Invalid')
                 return None
             stream.seek(addr)
             try:
                     return stream.read(size)
             except:
                 if self.debug:
-                    print('\t\t[DEBUG] FWS Size Invalid', end=' ')
+                    print('\t\t[DEBUG] FWS Size Invalid')
                 return None
         elif header == b"CWS":
             if self.cmd_run:
@@ -278,7 +281,7 @@ class xxxswf:
             uncompress_data = self.uncompress_zlib(stream.read())
             if uncompress_data is None:
                 if self.debug:
-                    print('\t\t[DEBUG] Zlib decompession failed', end=' ')
+                    print('\t\t[DEBUG] Zlib decompession failed')
                 return None
             # set index to version, skipping over the header
             stream.seek(addr + 3)
@@ -289,7 +292,7 @@ class xxxswf:
             uncompress_lzma = self.uncompress_lzma(stream.read())
             if uncompress_lzma is None:
                 if self.debug:
-                    print('\t\t[DEBUG] lzma decompession failed', end=' ')
+                    print('\t\t[DEBUG] lzma decompession failed')
                 return None
             stream.seek(addr + 3)
             return b"FWS" + stream.read(5) + uncompress_lzma[:size - 8]
@@ -544,7 +547,7 @@ class xxxswf:
         # for each SWF in the file
         for index, swf_addr in enumerate(swf_data):
             if self.cmd_run:
-                print("\t[ADDR] SWF %d at %s" % (index + 1, hex(swf_addr)), end=' ')
+                print("\t[ADDR] SWF %d at %s" % (index + 1, hex(swf_addr)))
             # set read to the address of the SWF header found
             stream.seek(swf_addr)
             # verify and extract SWF.
