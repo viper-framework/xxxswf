@@ -2,9 +2,9 @@
 Name:
     xxxswf.py
 Version:
-    2.0.0
+    2.0.1
 Date:
-    2017/02/02
+    2020/07/02
 Author:
     alexander<dot>hanel<at>gmail<dot>com
 
@@ -285,7 +285,7 @@ class xxxswf:
                 return None
             # set index to version, skipping over the header
             stream.seek(addr + 3)
-            return "FWS" + stream.read(5) + uncompress_data[:size - 8]
+            return b"FWS" + stream.read(5) + uncompress_data[:size - 8]
         elif header == b"ZWS":
             if self.cmd_run:
                 print("- ZWS Header")
@@ -375,7 +375,7 @@ class xxxswf:
         """compress a SWF with LZMA"""
         if isinstance(swf, bytes):
             swf = BytesIO(swf)
-        if not self.lzma_install:
+        if not HAVE_LZMA:
             if self.show_errors:
                 print("\t[ERROR] pylzma module not installed - aborting validation/decompression")
             return None
