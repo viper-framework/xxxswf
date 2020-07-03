@@ -121,13 +121,13 @@ class SwfHeader(object):
             swf.seek(3)
             vfl = swf.read(5)
             swf.read(4)
-            swf = "FWS" + vfl + lzma.decompress(swf.read())
+            swf = b"FWS" + vfl + lzma.decompress(swf.read())
             swf = self.check_type(swf)
             swf.seek(8)
         elif header['compression'] == 'zlib':
             swf.seek(3)
             vfl = swf.read(5)
-            swf = "FWS" + vfl + zlib.decompress(swf.read())
+            swf = b"FWS" + vfl + zlib.decompress(swf.read())
             swf = self.check_type(swf)
             swf.seek(8)
         tmp = swf.tell()
@@ -381,7 +381,7 @@ class xxxswf:
             return None
         try:
             signature = swf.read(3)
-            if signature != 'FWS':
+            if signature != b'FWS':
                 if self.show_errors:
                     print("\t[ERROR] FWS Header not found, aborting lzma compression")
                 return None
@@ -390,7 +390,7 @@ class xxxswf:
                 # "ZWS" | version | len | compressed len | lzma compressed data
                 # TEST
                 lzma_data = lzma.compress(swf.read())
-                return "ZWS" + vfl + struct.pack("<I", len(lzma_data) - 5) + lzma_data
+                return b"ZWS" + vfl + struct.pack("<I", len(lzma_data) - 5) + lzma_data
         except:
             return None
 
@@ -400,12 +400,12 @@ class xxxswf:
         self.show_errors = True
         try:
             signature = swf.read(3)
-            if signature != 'FWS':
+            if signature != b'FWS':
                 if self.show_errors:
                     print("\t[ERROR] FWS Header not found, aborting zlib compression")
                 return None
             vfl = swf.read(5)
-            return 'CWS' + vfl + zlib.compress(swf.read())
+            return b'CWS' + vfl + zlib.compress(swf.read())
         except:
             if self.show_errors:
                 print("\t[ERROR] Zlib compression failed")
